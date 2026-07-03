@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Reply Detail - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Client Reply</h1>
+                <div>
+                    <a href="{% url 'reply_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-user"></i> Client Message</h5>
+                </div>
+                <div class="card-body">
+                    <div style="white-space: pre-wrap;">{{ reply.client_message }}</div>
+                    <hr>
+                    <p><strong>Tone:</strong> {{ reply.get_tone_display }}</p>
+                    <p><strong>Created:</strong> {{ reply.created_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'reply_generate' reply.pk %}" class="btn btn-success">
+                            <i class="fas fa-robot"></i> Generate with AI
+                        </a>
+                        <a href="{% url 'reply_delete' reply.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-reply"></i> Generated Reply</h5>
+                </div>
+                <div class="card-body">
+                    {% if reply.generated_reply %}
+                        <div class="reply-content" style="white-space: pre-wrap;">
+                            {{ reply.generated_reply }}
+                        </div>
+                        <hr>
+                        <button class="btn btn-outline-primary" onclick="copyContent()">
+                            <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-robot fa-3x text-muted mb-3"></i>
+                            <h5>No reply generated yet</h5>
+                            <p class="text-muted">Click "Generate with AI" to create your reply</p>
+                            <a href="{% url 'reply_generate' reply.pk %}" class="btn btn-success">
+                                <i class="fas fa-robot"></i> Generate Now
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyContent() {
+    const content = document.querySelector('.reply-content');
+    if (content) {
+        navigator.clipboard.writeText(content.textContent).then(() => {
+            alert('Reply copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

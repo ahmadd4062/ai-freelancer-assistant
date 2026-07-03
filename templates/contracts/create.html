@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Create Contract - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Create New Contract</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'contract_create' %}">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3">Client Details</h5>
+                        <div class="mb-3">
+                            <label for="client_name" class="form-label">Client Name *</label>
+                            <input type="text" name="client_name" class="form-control" id="client_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_email" class="form-label">Client Email *</label>
+                            <input type="email" name="client_email" class="form-control" id="client_email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_company" class="form-label">Client Company</label>
+                            <input type="text" name="client_company" class="form-control" id="client_company">
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Freelancer Details</h5>
+                        <div class="mb-3">
+                            <label for="freelancer_name" class="form-label">Your Name *</label>
+                            <input type="text" name="freelancer_name" class="form-control" id="freelancer_name" value="{{ user.get_full_name|default:user.username }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="freelancer_email" class="form-label">Your Email *</label>
+                            <input type="email" name="freelancer_email" class="form-control" id="freelancer_email" value="{{ user.email }}" required>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Project Details</h5>
+                        <div class="mb-3">
+                            <label for="project_title" class="form-label">Project Title *</label>
+                            <input type="text" name="project_title" class="form-control" id="project_title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_scope" class="form-label">Project Scope *</label>
+                            <textarea name="project_scope" class="form-control" id="project_scope" rows="4" placeholder="Describe the project scope, deliverables, and what's included..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="timeline" class="form-label">Timeline *</label>
+                            <input type="text" name="timeline" class="form-control" id="timeline" placeholder="e.g. 4 weeks, 3 months" required>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Financial Terms</h5>
+                        <div class="mb-3">
+                            <label for="total_amount" class="form-label">Total Amount ($) *</label>
+                            <input type="number" name="total_amount" class="form-control" id="total_amount" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="payment_terms" class="form-label">Payment Terms *</label>
+                            <textarea name="payment_terms" class="form-control" id="payment_terms" rows="3" placeholder="e.g. 50% upfront, 50% upon completion" required></textarea>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Terms & Conditions</h5>
+                        <div class="mb-3">
+                            <label for="terms_conditions" class="form-label">Terms & Conditions</label>
+                            <textarea name="terms_conditions" class="form-control" id="terms_conditions" rows="4" placeholder="e.g. Confidentiality, intellectual property rights, cancellation policy..."></textarea>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Dates</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="start_date" class="form-label">Start Date *</label>
+                                <input type="date" name="start_date" class="form-control" id="start_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="end_date" class="form-label">End Date *</label>
+                                <input type="date" name="end_date" class="form-control" id="end_date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" class="form-select" id="status">
+                                <option value="draft">Draft</option>
+                                <option value="sent">Sent to Client</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'contract_list' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create Contract</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Include all client and freelancer details</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Be specific about project scope</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Set clear payment terms</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Add relevant terms & conditions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

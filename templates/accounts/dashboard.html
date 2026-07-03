@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Dashboard</h1>
+            <p class="lead">Welcome back, {{ user.username }}!</p>
+        </div>
+    </div>
+
+    <!-- Stats Widgets -->
+    <!-- Stats Widgets -->
+    <!-- Stats Widgets -->
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'proposal_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Proposals</h5>
+                        <h2 class="display-4">{{ proposal_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'coverletter_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Cover Letters</h5>
+                        <h2 class="display-4">{{ coverletter_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'gig_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5 class="card-title">Gig Descriptions</h5>
+                        <h2 class="display-4">{{ gig_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'pricing_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">Pricing Calculations</h5>
+                        <h2 class="display-4">{{ pricing_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Second Row of Stats -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'reply_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-secondary">
+                    <div class="card-body">
+                        <h5 class="card-title">Client Replies</h5>
+                        <h2 class="display-4">{{ reply_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'invoice_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Invoices</h5>
+                        <h2 class="display-4">{{ invoice_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'contract_list' %}" class="text-decoration-none">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Contracts</h5>
+                        <h2 class="display-4">{{ contract_count }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- AI Credits and Quick Actions -->
+    <div class="row">
+        <!-- AI Credits -->
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-coins"></i> AI Credits</h5>
+                </div>
+                <div class="card-body">
+                    <h2 class="display-4">{{ user.profile.ai_credits }}</h2>
+                    <p class="text-muted">Credits remaining</p>
+                </div>
+            </div>
+        </div>
+        <!-- Quick Actions -->
+        <!-- Quick Actions -->
+        <!-- Quick Actions -->
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'proposal_create' %}" class="btn btn-primary">
+                            <i class="fas fa-file-alt"></i> Generate Proposal
+                        </a>
+                        <a href="{% url 'coverletter_create' %}" class="btn btn-success">
+                            <i class="fas fa-envelope"></i> Create Cover Letter
+                        </a>
+                        <a href="{% url 'gig_create' %}" class="btn btn-info">
+                            <i class="fas fa-briefcase"></i> Create Gig Description
+                        </a>
+                        <a href="{% url 'pricing_calculator' %}" class="btn btn-warning">
+                            <i class="fas fa-calculator"></i> Smart Pricing Calculator
+                        </a>
+                        <a href="{% url 'reply_create' %}" class="btn btn-secondary">
+                            <i class="fas fa-comment-dots"></i> Client Reply Generator
+                        </a>
+                        <a href="{% url 'invoice_create' %}" class="btn btn-danger">
+                            <i class="fas fa-file-invoice"></i> Generate Invoice
+                        </a>
+                        <a href="{% url 'contract_create' %}" class="btn btn-dark">
+                            <i class="fas fa-file-contract"></i> Create Contract
+                        </a>
+                        <hr>
+                        <div class="d-flex flex-wrap gap-2 justify-content-between">
+                            <a href="{% url 'proposal_list' %}" class="btn btn-outline-primary btn-sm">Proposals</a>
+                            <a href="{% url 'coverletter_list' %}" class="btn btn-outline-success btn-sm">Cover
+                                Letters</a>
+                            <a href="{% url 'gig_list' %}" class="btn btn-outline-info btn-sm">Gigs</a>
+                            <a href="{% url 'pricing_list' %}" class="btn btn-outline-warning btn-sm">Pricing</a>
+                            <a href="{% url 'reply_list' %}" class="btn btn-outline-secondary btn-sm">Replies</a>
+                            <a href="{% url 'invoice_list' %}" class="btn btn-outline-danger btn-sm">Invoices</a>
+                            <a href="{% url 'contract_list' %}" class="btn btn-outline-dark btn-sm">Contracts</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <!-- Recent Activities -->
+    <!-- Recent Activities -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Activities</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_activities %}
+                    <div class="list-group">
+                        {% for activity in recent_activities %}
+                        <a href="{{ activity.url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    {% if activity.type == 'proposal' %}
+                                    <span class="badge bg-primary me-2">Proposal</span>
+                                    {% elif activity.type == 'coverletter' %}
+                                    <span class="badge bg-success me-2">Cover Letter</span>
+                                    {% elif activity.type == 'gig' %}
+                                    <span class="badge bg-info me-2">Gig</span>
+                                    {% elif activity.type == 'pricing' %}
+                                    <span class="badge bg-warning text-dark me-2">Pricing</span>
+                                    {% elif activity.type == 'reply' %}
+                                    <span class="badge bg-secondary me-2">Reply</span>
+                                    {% elif activity.type == 'invoice' %}
+                                    <span class="badge bg-danger me-2">Invoice</span>
+                                    {% elif activity.type == 'contract' %}
+                                    <span class="badge bg-dark me-2">Contract</span>
+                                    {% endif %}
+                                    {{ activity.title }}
+                                </div>
+                                <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted py-3">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                        No recent activities yet. Start generating content!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

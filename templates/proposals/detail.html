@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}{{ proposal.project_title }} - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>{{ proposal.project_title }}</h1>
+                <div>
+                    <a href="{% url 'proposal_export_pdf' proposal.pk %}" class="btn btn-danger">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </a>
+                    <a href="{% url 'proposal_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Proposal Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Client:</strong> {{ proposal.client_name }}</p>
+                    <p><strong>Budget:</strong> ${{ proposal.budget }}</p>
+                    <p><strong>Timeline:</strong> {{ proposal.timeline }}</p>
+                    <p><strong>Tone:</strong> {{ proposal.get_tone_display }}</p>
+                    <p><strong>Created:</strong> {{ proposal.created_at|date:"M d, Y H:i" }}</p>
+                    <p><strong>Skills:</strong></p>
+                    <div>
+                        {% for skill in proposal.get_skills_list %}
+                            <span class="badge bg-primary">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'proposal_generate' proposal.pk %}" class="btn btn-success">
+                            <i class="fas fa-robot"></i> Generate with AI
+                        </a>
+                        <a href="{% url 'proposal_edit' proposal.pk %}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'proposal_delete' proposal.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Generated Proposal</h5>
+                </div>
+                <div class="card-body">
+                    {% if proposal.generated_content %}
+                        <div class="proposal-content" style="white-space: pre-wrap;">
+                            {{ proposal.generated_content }}
+                        </div>
+                        <hr>
+                        <button class="btn btn-outline-primary" onclick="copyContent()">
+                            <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-robot fa-3x text-muted mb-3"></i>
+                            <h5>No content generated yet</h5>
+                            <p class="text-muted">Click "Generate with AI" to create your proposal</p>
+                            <a href="{% url 'proposal_generate' proposal.pk %}" class="btn btn-success">
+                                <i class="fas fa-robot"></i> Generate Now
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyContent() {
+    const content = document.querySelector('.proposal-content');
+    if (content) {
+        navigator.clipboard.writeText(content.textContent).then(() => {
+            alert('Proposal copied to clipboard!');
+        });
+    }
+}
+</script>
+{% endblock %}

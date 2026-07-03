@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Generate Gig Description - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Generate Gig Description with AI</h1>
+                <a href="{% url 'gig_detail' gig.pk %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Gig Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Service:</strong> {{ gig.service_category }}</p>
+                    <p><strong>Experience Level:</strong> {{ gig.get_experience_level_display }}</p>
+                    <p><strong>Delivery Time:</strong> {{ gig.delivery_time }}</p>
+                    <p><strong>Revisions:</strong> {{ gig.revisions }}</p>
+                    <p><strong>Skills:</strong></p>
+                    <div>
+                        {% for skill in gig.get_skills_list %}
+                            <span class="badge bg-primary">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                    <p><strong>Features:</strong></p>
+                    <div>
+                        {% for feature in gig.get_features_list %}
+                            <span class="badge bg-success">{{ feature }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">AI Generation</h5>
+                </div>
+                <div class="card-body">
+                    <p>Click the button below to generate:</p>
+                    <ul>
+                        <li>Compelling gig description</li>
+                        <li>SEO keywords for better visibility</li>
+                        <li>Frequently asked questions</li>
+                    </ul>
+                    <p><small class="text-muted">This will use 1 AI credit.</small></p>
+                    
+                    <form method="POST" action="{% url 'gig_generate' gig.pk %}">
+                        {% csrf_token %}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-robot"></i> Generate Gig Description
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

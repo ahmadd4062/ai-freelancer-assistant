@@ -1,0 +1,1 @@
+web: gunicorn ai_freelancer_assistant.wsgi

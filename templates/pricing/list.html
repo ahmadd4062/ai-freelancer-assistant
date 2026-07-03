@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Pricing History - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Pricing History</h1>
+                <a href="{% url 'pricing_calculator' %}" class="btn btn-primary">
+                    <i class="fas fa-calculator"></i> New Calculation
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            {% if pricings %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hourly Rate</th>
+                                <th>Hours</th>
+                                <th>Complexity</th>
+                                <th>Urgency</th>
+                                <th>Total Price</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pricing in pricings %}
+                            <tr>
+                                <td>${{ pricing.hourly_rate }}</td>
+                                <td>{{ pricing.estimated_hours }}</td>
+                                <td>{{ pricing.get_complexity_display }}</td>
+                                <td>{{ pricing.get_urgency_display }}</td>
+                                <td><strong>${{ pricing.suggested_price|floatformat:2 }}</strong></td>
+                                <td>{{ pricing.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'pricing_detail' pricing.pk %}" class="btn btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'pricing_delete' pricing.pk %}" class="btn btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                    <h4>No pricing calculations yet</h4>
+                    <p class="text-muted">Calculate your first project pricing</p>
+                    <a href="{% url 'pricing_calculator' %}" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i> Calculate Now
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

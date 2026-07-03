@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Delete Contract - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Delete Contract</h4>
+                </div>
+                <div class="card-body">
+                    <p>Are you sure you want to delete contract <strong>{{ contract.contract_number }}</strong>?</p>
+                    <p><strong>Client:</strong> {{ contract.client_name }}</p>
+                    <p><strong>Project:</strong> {{ contract.project_title }}</p>
+                    <p><strong>Amount:</strong> ${{ contract.total_amount|floatformat:2 }}</p>
+                    <p class="text-muted">This action cannot be undone.</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

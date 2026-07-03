@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Pricing Details - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Pricing Details</h1>
+                <div>
+                    <a href="{% url 'pricing_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Calculation Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <p><strong>Hourly Rate:</strong></p>
+                            <p><strong>Estimated Hours:</strong></p>
+                            <p><strong>Complexity:</strong></p>
+                            <p><strong>Urgency:</strong></p>
+                            <p><strong>Additional Charges:</strong></p>
+                            <p><strong>Tax:</strong></p>
+                            <p><strong>Created:</strong></p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p>${{ pricing.hourly_rate }}</p>
+                            <p>{{ pricing.estimated_hours }}</p>
+                            <p>{{ pricing.get_complexity_display }}</p>
+                            <p>{{ pricing.get_urgency_display }}</p>
+                            <p>${{ pricing.additional_charges|floatformat:2 }}</p>
+                            <p>${{ pricing.tax|floatformat:2 }}</p>
+                            <p>{{ pricing.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5><strong>Total Price:</strong></h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h5 class="text-success"><strong>${{ pricing.suggested_price|floatformat:2 }}</strong></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid">
+                        <a href="{% url 'pricing_delete' pricing.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete Record
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <!-- AI Suggestions -->
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-robot"></i> AI Suggestions</h5>
+                    <small>Powered by Google Gemini</small>
+                </div>
+                <div class="card-body">
+                    {% if pricing.recommended_delivery or pricing.market_analysis or pricing.service_tips %}
+                        {% if pricing.recommended_delivery %}
+                            <div class="mb-3">
+                                <h6><i class="fas fa-clock text-primary"></i> Recommended Delivery</h6>
+                                <p>{{ pricing.recommended_delivery }}</p>
+                            </div>
+                        {% endif %}
+                        
+                        {% if pricing.market_analysis %}
+                            <div class="mb-3">
+                                <h6><i class="fas fa-chart-line text-success"></i> Market Analysis</h6>
+                                <p>{{ pricing.market_analysis }}</p>
+                            </div>
+                        {% endif %}
+                        
+                        {% if pricing.service_tips %}
+                            <div>
+                                <h6><i class="fas fa-lightbulb text-warning"></i> Service Improvement Tips</h6>
+                                <p style="white-space: pre-wrap;">{{ pricing.service_tips }}</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-robot fa-3x text-muted mb-3"></i>
+                            <h5>No AI suggestions available</h5>
+                            <p class="text-muted">AI suggestions are generated when you calculate pricing with available credits.</p>
+                            <a href="{% url 'pricing_calculator' %}" class="btn btn-warning">
+                                <i class="fas fa-calculator"></i> Calculate Again
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

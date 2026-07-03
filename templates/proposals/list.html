@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}My Proposals - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Proposals</h1>
+                <a href="{% url 'proposal_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Proposal
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            {% if proposals %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Project Title</th>
+                                <th>Client</th>
+                                <th>Budget</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proposal in proposals %}
+                            <tr>
+                                <td>{{ proposal.project_title }}</td>
+                                <td>{{ proposal.client_name }}</td>
+                                <td>${{ proposal.budget }}</td>
+                                <td>{{ proposal.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'proposal_detail' proposal.pk %}" class="btn btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'proposal_generate' proposal.pk %}" class="btn btn-success">
+                                            <i class="fas fa-robot"></i>
+                                        </a>
+                                        <a href="{% url 'proposal_edit' proposal.pk %}" class="btn btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'proposal_delete' proposal.pk %}" class="btn btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h4>No proposals yet</h4>
+                    <p class="text-muted">Create your first proposal using AI</p>
+                    <a href="{% url 'proposal_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Proposal
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Delete Reply - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Delete Reply</h4>
+                </div>
+                <div class="card-body">
+                    <p>Are you sure you want to delete this client reply?</p>
+                    <p><strong>Client Message:</strong> {{ reply.client_message|truncatechars:100 }}</p>
+                    <p><strong>Created:</strong> {{ reply.created_at|date:"M d, Y" }}</p>
+                    <p class="text-muted">This action cannot be undone.</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'reply_detail' reply.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

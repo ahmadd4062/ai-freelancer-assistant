@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Edit Gig Description - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Edit Gig Description</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'gig_edit' gig.pk %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="service_category" class="form-label">Service Category *</label>
+                            <input type="text" name="service_category" class="form-control" id="service_category" value="{{ gig.service_category }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="skills" class="form-label">Skills (comma separated) *</label>
+                            <input type="text" name="skills" class="form-control" id="skills" value="{{ gig.skills }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="experience_level" class="form-label">Experience Level</label>
+                            <select name="experience_level" class="form-select" id="experience_level">
+                                <option value="entry" {% if gig.experience_level == 'entry' %}selected{% endif %}>Entry Level</option>
+                                <option value="intermediate" {% if gig.experience_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                                <option value="expert" {% if gig.experience_level == 'expert' %}selected{% endif %}>Expert</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="delivery_time" class="form-label">Delivery Time *</label>
+                            <input type="text" name="delivery_time" class="form-control" id="delivery_time" value="{{ gig.delivery_time }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="features" class="form-label">Features (comma separated) *</label>
+                            <input type="text" name="features" class="form-control" id="features" value="{{ gig.features }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="revisions" class="form-label">Number of Revisions</label>
+                            <input type="number" name="revisions" class="form-control" id="revisions" value="{{ gig.revisions }}" min="0">
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'gig_detail' gig.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update Gig</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update service category if needed</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Modify skills and features</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Adjust delivery time or revisions</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Regenerate AI content after changes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

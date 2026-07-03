@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Edit Invoice - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Edit Invoice {{ invoice.invoice_number }}</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'invoice_edit' invoice.pk %}">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3">Client Details</h5>
+                        <div class="mb-3">
+                            <label for="client_name" class="form-label">Client Name *</label>
+                            <input type="text" name="client_name" class="form-control" id="client_name" value="{{ invoice.client_name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_email" class="form-label">Client Email *</label>
+                            <input type="email" name="client_email" class="form-control" id="client_email" value="{{ invoice.client_email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_address" class="form-label">Client Address</label>
+                            <textarea name="client_address" class="form-control" id="client_address" rows="2">{{ invoice.client_address }}</textarea>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Project Details</h5>
+                        <div class="mb-3">
+                            <label for="project_title" class="form-label">Project Title *</label>
+                            <input type="text" name="project_title" class="form-control" id="project_title" value="{{ invoice.project_title }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_description" class="form-label">Project Description *</label>
+                            <textarea name="project_description" class="form-control" id="project_description" rows="3" required>{{ invoice.project_description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="services" class="form-label">Services Provided *</label>
+                            <textarea name="services" class="form-control" id="services" rows="3" required>{{ invoice.services }}</textarea>
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">Financial Details</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="amount" class="form-label">Amount ($) *</label>
+                                <input type="number" name="amount" class="form-control" id="amount" step="0.01" value="{{ invoice.amount }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tax" class="form-label">Tax ($)</label>
+                                <input type="number" name="tax" class="form-control" id="tax" step="0.01" value="{{ invoice.tax }}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="due_date" class="form-label">Due Date *</label>
+                            <input type="date" name="due_date" class="form-control" id="due_date" value="{{ invoice.due_date|date:'Y-m-d' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" class="form-select" id="status">
+                                <option value="draft" {% if invoice.status == 'draft' %}selected{% endif %}>Draft</option>
+                                <option value="sent" {% if invoice.status == 'sent' %}selected{% endif %}>Sent</option>
+                                <option value="paid" {% if invoice.status == 'paid' %}selected{% endif %}>Paid</option>
+                                <option value="overdue" {% if invoice.status == 'overdue' %}selected{% endif %}>Overdue</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'invoice_detail' invoice.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update Invoice</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update client details if changed</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Modify services if needed</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Change status as invoice progresses</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update due date if extended</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

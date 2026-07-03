@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Create Client Reply - AI Freelancer Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Create Client Reply</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'reply_create' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="client_message" class="form-label">Client Message *</label>
+                            <textarea name="client_message" class="form-control" id="client_message" rows="5" placeholder="Paste the client's message here..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="tone" class="form-label">Reply Tone</label>
+                            <select name="tone" class="form-select" id="tone">
+                                <option value="professional">Professional</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="formal">Formal</option>
+                                <option value="casual">Casual</option>
+                                <option value="persuasive">Persuasive</option>
+                                <option value="apologetic">Apologetic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'reply_list' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save and Generate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Copy the exact client message</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Choose appropriate tone</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Be specific in your response</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Keep it professional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
