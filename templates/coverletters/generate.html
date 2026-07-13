@@ -2,74 +2,177 @@
 {% block title %}Generate Cover Letter - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .info-card, .generate-card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        transition: box-shadow 0.2s ease;
+    }
+    .info-card:hover, .generate-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    }
+    .info-card .card-header {
+        background: #2c3e50;
+        border: none;
+        padding: 0.75rem 1.25rem;
+    }
+    .info-card .card-header h5 {
+        color: white;
+        font-weight: 600;
+    }
+    .info-item {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    .info-item strong {
+        color: #2c3e50;
+        display: inline-block;
+        min-width: 80px;
+    }
+    .generate-card .card-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+    }
+    .generate-card .card-header h5 {
+        color: white;
+        font-weight: 600;
+    }
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .feature-list li {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .feature-list li:last-child {
+        border-bottom: none;
+    }
+    .feature-list li i {
+        color: #28a745;
+        margin-right: 0.75rem;
+    }
+    .credit-badge {
+        background: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 0.9rem;
+    }
+    .btn-generate {
+        padding: 0.75rem;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+    }
+    .btn-generate:hover {
+        transform: translateY(-2px);
+    }
+    .skill-badge {
+        display: inline-block;
+        margin: 0.2rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+        .page-header .btn {
+            margin-top: 0.75rem;
+            width: 100%;
+        }
+        .info-item strong {
+            min-width: 70px;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Generate Cover Letter with AI</h1>
-                <a href="{% url 'coverletter_detail' coverletter.pk %}" class="btn btn-secondary">
+            <div class="d-flex justify-content-between align-items-center mb-4 page-header">
+                <h1 style="font-weight: 700; color: #2c3e50;">
+                    <i class="fas fa-robot" style="color: #28a745;"></i> Generate Cover Letter with AI
+                </h1>
+                <a href="{% url 'coverletter_detail' coverletter.pk %}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
+            <hr style="border-color: #e9ecef; opacity: 0.5;">
         </div>
     </div>
     
-    <div class="row">
+    <div class="row g-3">
+        <!-- Cover Letter Info -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Cover Letter Information</h5>
+            <div class="card info-card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Cover Letter Information</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Job Title:</strong> {{ coverletter.job_title }}</p>
-                    <p><strong>Company:</strong> {{ coverletter.company_name }}</p>
-                    <p><strong>Tone:</strong> {{ coverletter.get_tone_display }}</p>
-                    <p><strong>Skills:</strong></p>
-                    <div>
-                        {% for skill in coverletter.get_skills_list %}
-                            <span class="badge bg-primary">{{ skill }}</span>
-                        {% endfor %}
+                    <div class="info-item"><strong>Job Title:</strong> {{ coverletter.job_title }}</div>
+                    <div class="info-item"><strong>Company:</strong> {{ coverletter.company_name }}</div>
+                    <div class="info-item"><strong>Tone:</strong> {{ coverletter.get_tone_display }}</div>
+                    <div class="info-item">
+                        <strong>Skills:</strong>
+                        <div class="mt-1">
+                            {% for skill in coverletter.get_skills_list %}
+                                <span class="badge bg-primary skill-badge">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <hr>
-                    <p><strong>Experience:</strong></p>
-                    <p>{{ coverletter.experience }}</p>
+                    
+                    <div class="mt-3">
+                        <strong style="color: #2c3e50;">Experience:</strong>
+                        <p class="mt-1 text-muted" style="font-size: 0.95rem;">{{ coverletter.experience }}</p>
+                    </div>
                     {% if coverletter.portfolio_url %}
-                        <p><strong>Portfolio:</strong> <a href="{{ coverletter.portfolio_url }}" target="_blank">View Portfolio</a></p>
+                        <div class="mt-2">
+                            <strong style="color: #2c3e50;">Portfolio:</strong> 
+                            <a href="{{ coverletter.portfolio_url }}" target="_blank" style="color: #4a90e2; text-decoration: none;">
+                                <i class="fas fa-external-link-alt"></i> View Portfolio
+                            </a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
         </div>
         
+        <!-- AI Generation -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">AI Generation</h5>
+            <div class="card generate-card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-magic me-2"></i>AI Generation</h5>
                 </div>
                 <div class="card-body">
-                    <p>Click the button below to generate a professional cover letter using AI.</p>
-                    <p><small class="text-muted">This will use 1 AI credit.</small></p>
+                    <p class="mb-3">Generate a professional cover letter using AI with:</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Professional greeting</li>
+                        <li><i class="fas fa-check-circle"></i> Introduction and interest</li>
+                        <li><i class="fas fa-check-circle"></i> Relevant experience highlighted</li>
+                        <li><i class="fas fa-check-circle"></i> Skills matched to job requirements</li>
+                        <li><i class="fas fa-check-circle"></i> Professional closing</li>
+                    </ul>
                     
-                    <form method="POST" action="{% url 'coverletter_generate' coverletter.pk %}">
+                    <div class="credit-badge mt-3">
+                        <i class="fas fa-coins text-warning"></i> 
+                        This will use <strong>1 AI credit</strong>
+                    </div>
+                    
+                    <form method="POST" action="{% url 'coverletter_generate' coverletter.pk %}" class="mt-3">
                         {% csrf_token %}
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-robot"></i> Generate Cover Letter
+                            <button type="submit" class="btn btn-success btn-generate">
+                                <i class="fas fa-robot me-2"></i> Generate Cover Letter
                             </button>
                         </div>
                     </form>
-                    
-                    <hr>
-                    
-                    <div class="mt-3">
-                        <h6>What to expect:</h6>
-                        <ul>
-                            <li>Professional greeting</li>
-                            <li>Introduction and interest</li>
-                            <li>Relevant experience highlighted</li>
-                            <li>Skills matched to job requirements</li>
-                            <li>Professional closing</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>

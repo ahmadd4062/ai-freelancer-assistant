@@ -4,115 +4,240 @@
     <meta charset="utf-8">
     <title>Contract {{ contract.contract_number }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            padding: 40px;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            padding: 50px;
+            margin: 0;
+            background: #fff;
         }
         .header {
             text-align: center;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 3px solid #4a90e2;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
         }
         .header h1 {
-            color: #007bff;
-            margin: 0;
-            font-size: 28px;
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-        .header p {
-            color: #666;
-            margin: 5px 0;
+        .header .sub-info {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .header .sub-info span {
+            margin: 0 15px;
+        }
+        .header .sub-info strong {
+            color: #2c3e50;
         }
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         .section h2 {
-            color: #007bff;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-            font-size: 18px;
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 15px;
+        }
+        .section p {
+            margin-bottom: 6px;
+        }
+        .section .field-label {
+            font-weight: 600;
+            color: #34495e;
+            display: inline-block;
+            min-width: 120px;
+        }
+        .section .field-value {
+            color: #2c3e50;
+        }
+        .section .highlight {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #4a90e2;
+            margin-top: 8px;
         }
         .contract-content {
             background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
+            padding: 25px;
+            border-radius: 6px;
             white-space: pre-wrap;
-            margin-top: 15px;
-            border: 1px solid #e9ecef;
+            margin-top: 10px;
+            border: 1px solid #ecf0f1;
             font-size: 14px;
             line-height: 1.8;
         }
         .footer {
             text-align: center;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-            margin-top: 40px;
-            color: #666;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 25px;
+            margin-top: 45px;
+            color: #95a5a6;
             font-size: 12px;
         }
+        .footer p {
+            margin-bottom: 4px;
+        }
+        .footer .note {
+            color: #bdc3c7;
+            font-size: 10px;
+        }
+        .signature-section {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 2px solid #ecf0f1;
+        }
+        .signature-section .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .signature-section .signature-box {
+            width: 45%;
+        }
+        .signature-section .signature-line {
+            border-bottom: 1px solid #34495e;
+            margin-top: 5px;
+            padding-bottom: 5px;
+        }
+        .signature-section .signature-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        .badge-status {
+            display: inline-block;
+            background: #4a90e2;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .badge-status.signed { background: #27ae60; }
+        .badge-status.sent { background: #3498db; }
+        .badge-status.completed { background: #2c3e50; }
+        .badge-status.draft { background: #f39c12; }
         @page {
-            margin: 40px;
+            margin: 40px 50px;
+        }
+        @media print {
+            body { padding: 30px; }
+            .section { page-break-inside: avoid; }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <h1>Professional Services Contract</h1>
-        <p><strong>Contract #:</strong> {{ contract.contract_number }}</p>
-        <p><strong>Date:</strong> {{ contract.created_date|date:"F d, Y" }}</p>
+        <div class="sub-info">
+            <span><strong>Contract #:</strong> {{ contract.contract_number }}</span>
+            <span><strong>Date:</strong> {{ contract.created_date|date:"F d, Y" }}</span>
+            <span><span class="badge-status {% if contract.status == 'signed' %}signed{% elif contract.status == 'sent' %}sent{% elif contract.status == 'completed' %}completed{% else %}draft{% endif %}">
+                {{ contract.get_status_display }}
+            </span></span>
+        </div>
     </div>
 
+    <!-- Parties -->
     <div class="section">
-        <h2>Parties</h2>
-        <p><strong>Client:</strong> {{ contract.client_name }}</p>
+        <h2>1. Parties</h2>
+        <p><span class="field-label">Client:</span> <span class="field-value">{{ contract.client_name }}</span></p>
         {% if contract.client_company %}
-            <p><strong>Company:</strong> {{ contract.client_company }}</p>
+            <p><span class="field-label">Company:</span> <span class="field-value">{{ contract.client_company }}</span></p>
         {% endif %}
-        <p><strong>Email:</strong> {{ contract.client_email }}</p>
-        <br>
-        <p><strong>Freelancer:</strong> {{ contract.freelancer_name }}</p>
-        <p><strong>Email:</strong> {{ contract.freelancer_email }}</p>
+        <p><span class="field-label">Email:</span> <span class="field-value">{{ contract.client_email }}</span></p>
+        <p style="margin-top: 8px;"><span class="field-label">Freelancer:</span> <span class="field-value">{{ contract.freelancer_name }}</span></p>
+        <p><span class="field-label">Email:</span> <span class="field-value">{{ contract.freelancer_email }}</span></p>
     </div>
 
+    <!-- Project Details -->
     <div class="section">
-        <h2>Project Details</h2>
-        <p><strong>Project Title:</strong> {{ contract.project_title }}</p>
-        <p><strong>Timeline:</strong> {{ contract.timeline }}</p>
-        <p><strong>Start Date:</strong> {{ contract.start_date|date:"F d, Y" }}</p>
-        <p><strong>End Date:</strong> {{ contract.end_date|date:"F d, Y" }}</p>
-        <p><strong>Total Amount:</strong> ${{ contract.total_amount|floatformat:2 }}</p>
+        <h2>2. Project Details</h2>
+        <p><span class="field-label">Project Title:</span> <span class="field-value">{{ contract.project_title }}</span></p>
+        <p><span class="field-label">Timeline:</span> <span class="field-value">{{ contract.timeline }}</span></p>
+        <p><span class="field-label">Start Date:</span> <span class="field-value">{{ contract.start_date|date:"F d, Y" }}</span></p>
+        <p><span class="field-label">End Date:</span> <span class="field-value">{{ contract.end_date|date:"F d, Y" }}</span></p>
+        <p style="margin-top: 8px;"><span class="field-label">Total Amount:</span> <span class="field-value" style="font-weight: 700; color: #27ae60;">${{ contract.total_amount|floatformat:2 }}</span></p>
     </div>
 
+    <!-- Project Scope -->
     <div class="section">
-        <h2>Project Scope</h2>
-        <p>{{ contract.project_scope }}</p>
+        <h2>3. Project Scope</h2>
+        <div class="highlight">
+            <p style="margin: 0;">{{ contract.project_scope }}</p>
+        </div>
     </div>
 
+    <!-- Payment Terms -->
     <div class="section">
-        <h2>Payment Terms</h2>
-        <p>{{ contract.payment_terms }}</p>
+        <h2>4. Payment Terms</h2>
+        <div class="highlight">
+            <p style="margin: 0;">{{ contract.payment_terms }}</p>
+        </div>
     </div>
 
+    <!-- Terms & Conditions -->
     <div class="section">
-        <h2>Terms & Conditions</h2>
-        <p>{{ contract.terms_conditions }}</p>
+        <h2>5. Terms & Conditions</h2>
+        <div class="highlight">
+            <p style="margin: 0;">{{ contract.terms_conditions|default:"No additional terms specified." }}</p>
+        </div>
     </div>
 
+    <!-- Full Contract -->
     {% if contract.generated_contract %}
     <div class="section">
-        <h2>Full Contract</h2>
+        <h2>6. Full Contract Agreement</h2>
         <div class="contract-content">
             {{ contract.generated_contract }}
         </div>
     </div>
     {% endif %}
 
+    <!-- Signature Section -->
+    <div class="signature-section">
+        <h2 style="font-size: 17px; font-weight: 600; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-bottom: 20px;">
+            7. Signatures
+        </h2>
+        <div class="signature-row">
+            <div class="signature-box">
+                <p style="font-weight: 600; margin-bottom: 5px;">Client Signature</p>
+                <div class="signature-line">&nbsp;</div>
+                <div class="signature-label">{{ contract.client_name }}</div>
+                <div class="signature-label" style="margin-top: 2px;">Date: _____________</div>
+            </div>
+            <div class="signature-box">
+                <p style="font-weight: 600; margin-bottom: 5px;">Freelancer Signature</p>
+                <div class="signature-line">&nbsp;</div>
+                <div class="signature-label">{{ contract.freelancer_name }}</div>
+                <div class="signature-label" style="margin-top: 2px;">Date: _____________</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <div class="footer">
-        <p>This contract is generated by AI Freelancer Assistant</p>
-        <p style="color: #999; font-size: 10px;">Please review and customize before signing</p>
+        <p>Generated by AI Freelancer Assistant</p>
+        <p class="note">Please review all terms carefully before signing. This is a legally binding document.</p>
+        <p class="note" style="margin-top: 8px;">Contract #{{ contract.contract_number }} &bull; Generated on {{ contract.created_date|date:"F d, Y" }}</p>
     </div>
 </body>
 </html>

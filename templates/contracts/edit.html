@@ -2,117 +2,200 @@
 {% block title %}Edit Contract - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .form-section {
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    .form-section h5 {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    .form-section h5 i {
+        color: #4a90e2;
+        margin-right: 0.5rem;
+    }
+    .tip-card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .tip-card .card-header {
+        background: linear-gradient(135deg, #4a90e2, #667eea);
+        border: none;
+        border-radius: 8px 8px 0 0;
+    }
+    .tip-item {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .tip-item:last-child {
+        border-bottom: none;
+    }
+    .tip-item i {
+        color: #28a745;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.15);
+    }
+    @media (max-width: 768px) {
+        .form-section {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Edit Contract {{ contract.contract_number }}</h1>
+            <h1 class="mb-4" style="font-weight: 700; color: #2c3e50;">
+                <i class="fas fa-edit" style="color: #f39c12;"></i> Edit Contract {{ contract.contract_number }}
+            </h1>
+            <hr style="border-color: #e9ecef; opacity: 0.5;">
         </div>
     </div>
     
     <div class="row">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <form method="POST" action="{% url 'contract_edit' contract.pk %}">
                         {% csrf_token %}
                         
-                        <h5 class="mb-3">Client Details</h5>
-                        <div class="mb-3">
-                            <label for="client_name" class="form-label">Client Name *</label>
-                            <input type="text" name="client_name" class="form-control" id="client_name" value="{{ contract.client_name }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="client_email" class="form-label">Client Email *</label>
-                            <input type="email" name="client_email" class="form-control" id="client_email" value="{{ contract.client_email }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="client_company" class="form-label">Client Company</label>
-                            <input type="text" name="client_company" class="form-control" id="client_company" value="{{ contract.client_company }}">
-                        </div>
-                        
-                        <h5 class="mb-3 mt-4">Freelancer Details</h5>
-                        <div class="mb-3">
-                            <label for="freelancer_name" class="form-label">Your Name *</label>
-                            <input type="text" name="freelancer_name" class="form-control" id="freelancer_name" value="{{ contract.freelancer_name }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="freelancer_email" class="form-label">Your Email *</label>
-                            <input type="email" name="freelancer_email" class="form-control" id="freelancer_email" value="{{ contract.freelancer_email }}" required>
-                        </div>
-                        
-                        <h5 class="mb-3 mt-4">Project Details</h5>
-                        <div class="mb-3">
-                            <label for="project_title" class="form-label">Project Title *</label>
-                            <input type="text" name="project_title" class="form-control" id="project_title" value="{{ contract.project_title }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="project_scope" class="form-label">Project Scope *</label>
-                            <textarea name="project_scope" class="form-control" id="project_scope" rows="4" required>{{ contract.project_scope }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="timeline" class="form-label">Timeline *</label>
-                            <input type="text" name="timeline" class="form-control" id="timeline" value="{{ contract.timeline }}" required>
-                        </div>
-                        
-                        <h5 class="mb-3 mt-4">Financial Terms</h5>
-                        <div class="mb-3">
-                            <label for="total_amount" class="form-label">Total Amount ($) *</label>
-                            <input type="number" name="total_amount" class="form-control" id="total_amount" step="0.01" value="{{ contract.total_amount }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="payment_terms" class="form-label">Payment Terms *</label>
-                            <textarea name="payment_terms" class="form-control" id="payment_terms" rows="3" required>{{ contract.payment_terms }}</textarea>
-                        </div>
-                        
-                        <h5 class="mb-3 mt-4">Terms & Conditions</h5>
-                        <div class="mb-3">
-                            <label for="terms_conditions" class="form-label">Terms & Conditions</label>
-                            <textarea name="terms_conditions" class="form-control" id="terms_conditions" rows="4">{{ contract.terms_conditions }}</textarea>
-                        </div>
-                        
-                        <h5 class="mb-3 mt-4">Dates</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="start_date" class="form-label">Start Date *</label>
-                                <input type="date" name="start_date" class="form-control" id="start_date" value="{{ contract.start_date|date:'Y-m-d' }}" required>
+                        <!-- Client Details -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-user"></i> Client Details</h5>
+                            <div class="mb-3">
+                                <label for="client_name" class="form-label fw-semibold">Client Name <span class="text-danger">*</span></label>
+                                <input type="text" name="client_name" class="form-control" id="client_name" value="{{ contract.client_name }}" required>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="end_date" class="form-label">End Date *</label>
-                                <input type="date" name="end_date" class="form-control" id="end_date" value="{{ contract.end_date|date:'Y-m-d' }}" required>
+                            <div class="mb-3">
+                                <label for="client_email" class="form-label fw-semibold">Client Email <span class="text-danger">*</span></label>
+                                <input type="email" name="client_email" class="form-control" id="client_email" value="{{ contract.client_email }}" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="client_company" class="form-label fw-semibold">Client Company</label>
+                                <input type="text" name="client_company" class="form-control" id="client_company" value="{{ contract.client_company }}">
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" class="form-select" id="status">
-                                <option value="draft" {% if contract.status == 'draft' %}selected{% endif %}>Draft</option>
-                                <option value="sent" {% if contract.status == 'sent' %}selected{% endif %}>Sent to Client</option>
-                                <option value="signed" {% if contract.status == 'signed' %}selected{% endif %}>Signed</option>
-                                <option value="completed" {% if contract.status == 'completed' %}selected{% endif %}>Completed</option>
-                            </select>
+                        <!-- Freelancer Details -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-user-tie"></i> Freelancer Details</h5>
+                            <div class="mb-3">
+                                <label for="freelancer_name" class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
+                                <input type="text" name="freelancer_name" class="form-control" id="freelancer_name" value="{{ contract.freelancer_name }}" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="freelancer_email" class="form-label fw-semibold">Your Email <span class="text-danger">*</span></label>
+                                <input type="email" name="freelancer_email" class="form-control" id="freelancer_email" value="{{ contract.freelancer_email }}" required>
+                            </div>
                         </div>
                         
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Contract</button>
+                        <!-- Project Details -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-project-diagram"></i> Project Details</h5>
+                            <div class="mb-3">
+                                <label for="project_title" class="form-label fw-semibold">Project Title <span class="text-danger">*</span></label>
+                                <input type="text" name="project_title" class="form-control" id="project_title" value="{{ contract.project_title }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="project_scope" class="form-label fw-semibold">Project Scope <span class="text-danger">*</span></label>
+                                <textarea name="project_scope" class="form-control" id="project_scope" rows="4" required>{{ contract.project_scope }}</textarea>
+                            </div>
+                            <div class="mb-0">
+                                <label for="timeline" class="form-label fw-semibold">Timeline <span class="text-danger">*</span></label>
+                                <input type="text" name="timeline" class="form-control" id="timeline" value="{{ contract.timeline }}" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Financial Terms -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-dollar-sign"></i> Financial Terms</h5>
+                            <div class="mb-3">
+                                <label for="total_amount" class="form-label fw-semibold">Total Amount ($) <span class="text-danger">*</span></label>
+                                <input type="number" name="total_amount" class="form-control" id="total_amount" step="0.01" value="{{ contract.total_amount }}" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="payment_terms" class="form-label fw-semibold">Payment Terms <span class="text-danger">*</span></label>
+                                <textarea name="payment_terms" class="form-control" id="payment_terms" rows="3" required>{{ contract.payment_terms }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Terms & Conditions -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-gavel"></i> Terms & Conditions</h5>
+                            <div class="mb-0">
+                                <label for="terms_conditions" class="form-label fw-semibold">Terms & Conditions</label>
+                                <textarea name="terms_conditions" class="form-control" id="terms_conditions" rows="4">{{ contract.terms_conditions }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Dates & Status -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-calendar-alt"></i> Dates & Status</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="start_date" class="form-label fw-semibold">Start Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="start_date" class="form-control" id="start_date" value="{{ contract.start_date|date:'Y-m-d' }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="end_date" class="form-label fw-semibold">End Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="end_date" class="form-control" id="end_date" value="{{ contract.end_date|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-0">
+                                <label for="status" class="form-label fw-semibold">Status</label>
+                                <select name="status" class="form-select" id="status">
+                                    <option value="draft" {% if contract.status == 'draft' %}selected{% endif %}>📄 Draft</option>
+                                    <option value="sent" {% if contract.status == 'sent' %}selected{% endif %}>📨 Sent to Client</option>
+                                    <option value="signed" {% if contract.status == 'signed' %}selected{% endif %}>✍️ Signed</option>
+                                    <option value="completed" {% if contract.status == 'completed' %}selected{% endif %}>✅ Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-4">
+                            <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Contract
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         
+        <!-- Tips Sidebar -->
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+            <div class="card tip-card">
+                <div class="card-header text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Quick Tips</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update any changed details</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Modify scope if needed</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update payment terms</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Change status as contract progresses</li>
-                    </ul>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Update any changed details
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Modify scope if needed
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Update payment terms
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Change status as contract progresses
+                    </div>
                 </div>
             </div>
         </div>

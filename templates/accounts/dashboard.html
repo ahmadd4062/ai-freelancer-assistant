@@ -2,88 +2,459 @@
 {% block title %}Dashboard - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    /* Dashboard specific styles */
+    .dashboard-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: none;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+    }
+    
+    .stat-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .stat-card .card-body {
+        padding: 1.5rem 1.25rem;
+    }
+    
+    .stat-card .stat-label {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 0.8rem;
+        opacity: 0.9;
+        color: #2c3e50;
+    }
+    
+    .stat-card .stat-label-white {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 0.8rem;
+        opacity: 0.95;
+        color: #ffffff;
+    }
+    
+    .stat-card .stat-number {
+        font-weight: 700;
+        font-size: 2.8rem;
+        line-height: 1.2;
+    }
+    
+    .stat-card .stat-number-dark {
+        color: #2c3e50;
+    }
+    
+    .gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .gradient-pink {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .gradient-blue {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .gradient-orange {
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    }
+    
+    .gradient-mint {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+    
+    .gradient-peach {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    }
+    
+    .gradient-sky {
+        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    }
+    
+    .stat-card .badge-light-opacity {
+        background-color: rgba(255, 255, 255, 0.3);
+        color: white;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .stat-card .badge-dark-opacity {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: #2c3e50;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    .stat-card .stat-sub {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .stat-card .stat-sub-white {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .stat-card .stat-sub-dark {
+        color: #4a5568;
+    }
+    
+    .quick-action-btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        transition: transform 0.15s ease;
+        border-radius: 8px;
+    }
+    
+    .quick-action-btn:hover {
+        transform: scale(1.03);
+    }
+    
+    .quick-action-btn i {
+        margin-right: 0.3rem;
+    }
+    
+    .activity-item {
+        border-bottom: 1px solid #f1f3f5 !important;
+        transition: background-color 0.15s ease;
+        padding: 0.75rem 0;
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none !important;
+    }
+    
+    .activity-item:hover {
+        background-color: #f8f9fa !important;
+        border-radius: 8px;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .activity-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .activity-icon.proposal {
+        background: #667eea20;
+        color: #667eea;
+    }
+    
+    .activity-icon.coverletter {
+        background: #f093fb20;
+        color: #f5576c;
+    }
+    
+    .activity-icon.gig {
+        background: #4facfe20;
+        color: #4facfe;
+    }
+    
+    .activity-icon.pricing {
+        background: #f6d36520;
+        color: #f39c12;
+    }
+    
+    .activity-icon.reply {
+        background: #a8edea20;
+        color: #2ecc71;
+    }
+    
+    .activity-icon.invoice {
+        background: #ffecd220;
+        color: #e74c3c;
+    }
+    
+    .activity-icon.contract {
+        background: #a1c4fd20;
+        color: #3498db;
+    }
+    
+    .activity-title {
+        font-weight: 500;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+    
+    .activity-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    .activity-badge {
+        font-weight: 400;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+    }
+    
+    .nav-link-outline {
+        transition: all 0.15s ease;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.6rem;
+    }
+    
+    .nav-link-outline:hover {
+        transform: translateY(-1px);
+    }
+    
+    .welcome-heading {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .welcome-text {
+        font-size: 1.1rem;
+    }
+    
+    .credits-progress {
+        height: 6px;
+        width: 120px;
+        border-radius: 10px;
+    }
+    
+    .credits-number {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        line-height: 1;
+    }
+    
+    .status-badge {
+        font-weight: 400;
+        padding: 0.3rem 0.8rem;
+    }
+    
+    .empty-state-icon {
+        font-size: 3.5rem;
+        color: #e9ecef;
+    }
+    
+    .section-divider {
+        border-color: #e9ecef;
+        opacity: 0.6;
+        margin: 1.25rem 0;
+    }
+    
+    @media (max-width: 768px) {
+        .stat-card .stat-number {
+            font-size: 2.2rem;
+        }
+        
+        .credits-number {
+            font-size: 2.8rem;
+        }
+        
+        .credits-progress {
+            width: 80px !important;
+        }
+        
+        .quick-action-btn {
+            font-size: 0.78rem;
+            padding: 0.4rem 0.5rem;
+        }
+        
+        .welcome-text {
+            font-size: 0.95rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .stat-card .stat-number {
+            font-size: 1.8rem;
+        }
+        
+        .stat-card .card-body {
+            padding: 1rem;
+        }
+        
+        .activity-title {
+            font-size: 0.85rem;
+        }
+        
+        .activity-meta {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
-    <div class="row">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
         <div class="col-12">
-            <h1 class="mb-4">Dashboard</h1>
-            <p class="lead">Welcome back, {{ user.username }}!</p>
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <h1 class="mb-1 welcome-heading">
+                        <i class="fas fa-chart-pie me-2" style="color: #3498db;"></i>Dashboard
+                    </h1>
+                    <p class="lead text-muted mb-0 welcome-text">
+                        Welcome back, <strong>{{ user.username }}</strong>! 
+                        
+                    </p>
+                </div>
+                <div class="mt-2 mt-sm-0">
+                    <span class="text-muted" style="font-size: 0.9rem;">
+                        <i class="far fa-calendar-alt me-1"></i> {{ now|date:"l, F j, Y" }}
+                    </span>
+                </div>
+            </div>
+            <hr class="section-divider">
         </div>
     </div>
 
-    <!-- Stats Widgets -->
-    <!-- Stats Widgets -->
-    <!-- Stats Widgets -->
-    <div class="row">
-        <div class="col-md-3 mb-3">
+    <!-- Stats Widgets - Row 1 -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
             <a href="{% url 'proposal_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-primary">
+                <div class="card stat-card gradient-primary dashboard-card">
                     <div class="card-body">
-                        <h5 class="card-title">Total Proposals</h5>
-                        <h2 class="display-4">{{ proposal_count }}</h2>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="stat-label-white">
+                                <i class="fas fa-file-alt me-1"></i> PROPOSALS
+                            </h6>
+                            <span class="badge-light-opacity badge">Total</span>
+                        </div>
+                        <h2 class="stat-number text-white mb-0 mt-2">{{ proposal_count }}</h2>
+                        <div class="mt-2">
+                            <small class="stat-sub stat-sub-white">
+                                <i class="fas fa-arrow-up me-1"></i> All proposals
+                            </small>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <a href="{% url 'coverletter_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-success">
+                <div class="card stat-card gradient-pink dashboard-card">
                     <div class="card-body">
-                        <h5 class="card-title">Cover Letters</h5>
-                        <h2 class="display-4">{{ coverletter_count }}</h2>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="stat-label-white">
+                                <i class="fas fa-envelope me-1"></i> COVER LETTERS
+                            </h6>
+                            <span class="badge-light-opacity badge">Total</span>
+                        </div>
+                        <h2 class="stat-number text-white mb-0 mt-2">{{ coverletter_count }}</h2>
+                        <div class="mt-2">
+                            <small class="stat-sub stat-sub-white">
+                                <i class="fas fa-arrow-up me-1"></i> All cover letters
+                            </small>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <a href="{% url 'gig_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-info">
+                <div class="card stat-card gradient-blue dashboard-card">
                     <div class="card-body">
-                        <h5 class="card-title">Gig Descriptions</h5>
-                        <h2 class="display-4">{{ gig_count }}</h2>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="stat-label-white">
+                                <i class="fas fa-briefcase me-1"></i> GIG DESCRIPTIONS
+                            </h6>
+                            <span class="badge-light-opacity badge">Total</span>
+                        </div>
+                        <h2 class="stat-number text-white mb-0 mt-2">{{ gig_count }}</h2>
+                        <div class="mt-2">
+                            <small class="stat-sub stat-sub-white">
+                                <i class="fas fa-arrow-up me-1"></i> All gigs
+                            </small>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <a href="{% url 'pricing_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-warning">
+                <div class="card stat-card gradient-orange dashboard-card">
                     <div class="card-body">
-                        <h5 class="card-title">Pricing Calculations</h5>
-                        <h2 class="display-4">{{ pricing_count }}</h2>
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="stat-label" style="color: #2c3e50; font-weight: 700;">
+                                <i class="fas fa-calculator me-1"></i> PRICING
+                            </h6>
+                            <span class="badge-dark-opacity badge">Total</span>
+                        </div>
+                        <h2 class="stat-number stat-number-dark mb-0 mt-2">{{ pricing_count }}</h2>
+                        <div class="mt-2">
+                            <small class="stat-sub stat-sub-dark">
+                                <i class="fas fa-arrow-up me-1"></i> All calculations
+                            </small>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
     </div>
 
-    <!-- Second Row of Stats -->
-    <div class="row">
-        <div class="col-md-4 mb-3">
+    <!-- Stats Widgets - Row 2 -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
             <a href="{% url 'reply_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-secondary">
-                    <div class="card-body">
-                        <h5 class="card-title">Client Replies</h5>
-                        <h2 class="display-4">{{ reply_count }}</h2>
+                <div class="card stat-card gradient-mint dashboard-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="stat-label" style="color: #2c3e50; font-weight: 700;">
+                                <i class="fas fa-comment-dots me-1"></i> CLIENT REPLIES
+                            </h6>
+                            <h2 class="stat-number stat-number-dark mb-0">{{ reply_count }}</h2>
+                            <small class="stat-sub stat-sub-dark">
+                                <i class="fas fa-arrow-up me-1"></i> All replies
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <span class="badge-dark-opacity badge">Total</span>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4">
             <a href="{% url 'invoice_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-danger">
-                    <div class="card-body">
-                        <h5 class="card-title">Invoices</h5>
-                        <h2 class="display-4">{{ invoice_count }}</h2>
+                <div class="card stat-card gradient-peach dashboard-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="stat-label" style="color: #2c3e50; font-weight: 700;">
+                                <i class="fas fa-file-invoice me-1"></i> INVOICES
+                            </h6>
+                            <h2 class="stat-number stat-number-dark mb-0">{{ invoice_count }}</h2>
+                            <small class="stat-sub stat-sub-dark">
+                                <i class="fas fa-arrow-up me-1"></i> All invoices
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <span class="badge-dark-opacity badge">Total</span>
+                        </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4">
             <a href="{% url 'contract_list' %}" class="text-decoration-none">
-                <div class="card text-white bg-dark">
-                    <div class="card-body">
-                        <h5 class="card-title">Contracts</h5>
-                        <h2 class="display-4">{{ contract_count }}</h2>
+                <div class="card stat-card gradient-sky dashboard-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="stat-label" style="color: #2c3e50; font-weight: 700;">
+                                <i class="fas fa-file-contract me-1"></i> CONTRACTS
+                            </h6>
+                            <h2 class="stat-number stat-number-dark mb-0">{{ contract_count }}</h2>
+                            <small class="stat-sub stat-sub-dark">
+                                <i class="fas fa-arrow-up me-1"></i> All contracts
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <span class="badge-dark-opacity badge">Total</span>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -91,60 +462,95 @@
     </div>
 
     <!-- AI Credits and Quick Actions -->
-    <div class="row">
+    <div class="row g-3 mb-4">
         <!-- AI Credits -->
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fas fa-coins"></i> AI Credits</h5>
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm dashboard-card h-100">
+                <div class="card-header bg-transparent border-0 pt-3">
+                    <h5 class="mb-0" style="font-weight: 600; color: #2c3e50;">
+                        <i class="fas fa-coins me-2" style="color: #f39c12;"></i> AI Credits
+                    </h5>
                 </div>
-                <div class="card-body">
-                    <h2 class="display-4">{{ user.profile.ai_credits }}</h2>
-                    <p class="text-muted">Credits remaining</p>
+                <div class="card-body d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center">
+                            <span class="credits-number">{{ user.profile.ai_credits }}</span>
+                            <div class="ms-3">
+                                <div class="progress credits-progress">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         aria-valuenow="{{ user.profile.ai_credits|default:0 }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <small class="text-muted mt-1 d-block">Credits remaining</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge bg-light text-dark p-2">
+                            <i class="fas fa-infinity me-1"></i> Available
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
+        
         <!-- Quick Actions -->
-        <!-- Quick Actions -->
-        <!-- Quick Actions -->
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm dashboard-card h-100">
+                <div class="card-header bg-transparent border-0 pt-3">
+                    <h5 class="mb-0" style="font-weight: 600; color: #2c3e50;">
+                        <i class="fas fa-bolt me-2" style="color: #e67e22;"></i> Quick Actions
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'proposal_create' %}" class="btn btn-primary">
-                            <i class="fas fa-file-alt"></i> Generate Proposal
-                        </a>
-                        <a href="{% url 'coverletter_create' %}" class="btn btn-success">
-                            <i class="fas fa-envelope"></i> Create Cover Letter
-                        </a>
-                        <a href="{% url 'gig_create' %}" class="btn btn-info">
-                            <i class="fas fa-briefcase"></i> Create Gig Description
-                        </a>
-                        <a href="{% url 'pricing_calculator' %}" class="btn btn-warning">
-                            <i class="fas fa-calculator"></i> Smart Pricing Calculator
-                        </a>
-                        <a href="{% url 'reply_create' %}" class="btn btn-secondary">
-                            <i class="fas fa-comment-dots"></i> Client Reply Generator
-                        </a>
-                        <a href="{% url 'invoice_create' %}" class="btn btn-danger">
-                            <i class="fas fa-file-invoice"></i> Generate Invoice
-                        </a>
-                        <a href="{% url 'contract_create' %}" class="btn btn-dark">
-                            <i class="fas fa-file-contract"></i> Create Contract
-                        </a>
-                        <hr>
-                        <div class="d-flex flex-wrap gap-2 justify-content-between">
-                            <a href="{% url 'proposal_list' %}" class="btn btn-outline-primary btn-sm">Proposals</a>
-                            <a href="{% url 'coverletter_list' %}" class="btn btn-outline-success btn-sm">Cover
-                                Letters</a>
-                            <a href="{% url 'gig_list' %}" class="btn btn-outline-info btn-sm">Gigs</a>
-                            <a href="{% url 'pricing_list' %}" class="btn btn-outline-warning btn-sm">Pricing</a>
-                            <a href="{% url 'reply_list' %}" class="btn btn-outline-secondary btn-sm">Replies</a>
-                            <a href="{% url 'invoice_list' %}" class="btn btn-outline-danger btn-sm">Invoices</a>
-                            <a href="{% url 'contract_list' %}" class="btn btn-outline-dark btn-sm">Contracts</a>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'proposal_create' %}" class="btn btn-primary quick-action-btn w-100">
+                                <i class="fas fa-file-alt"></i> Proposal
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'coverletter_create' %}" class="btn btn-success quick-action-btn w-100">
+                                <i class="fas fa-envelope"></i> Cover Letter
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'gig_create' %}" class="btn btn-info quick-action-btn w-100 text-white">
+                                <i class="fas fa-briefcase"></i> Gig
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'pricing_calculator' %}" class="btn btn-warning quick-action-btn w-100">
+                                <i class="fas fa-calculator"></i> Pricing
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'reply_create' %}" class="btn btn-secondary quick-action-btn w-100">
+                                <i class="fas fa-comment-dots"></i> Reply
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'invoice_create' %}" class="btn btn-danger quick-action-btn w-100">
+                                <i class="fas fa-file-invoice"></i> Invoice
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a href="{% url 'contract_create' %}" class="btn btn-dark quick-action-btn w-100">
+                                <i class="fas fa-file-contract"></i> Contract
+                            </a>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <hr style="margin: 0.5rem 0;">
+                            <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                <a href="{% url 'proposal_list' %}" class="btn btn-outline-primary nav-link-outline">Proposals</a>
+                                <a href="{% url 'coverletter_list' %}" class="btn btn-outline-success nav-link-outline">Cover Letters</a>
+                                <a href="{% url 'gig_list' %}" class="btn btn-outline-info nav-link-outline">Gigs</a>
+                                <a href="{% url 'pricing_list' %}" class="btn btn-outline-warning nav-link-outline">Pricing</a>
+                                <a href="{% url 'reply_list' %}" class="btn btn-outline-secondary nav-link-outline">Replies</a>
+                                <a href="{% url 'invoice_list' %}" class="btn btn-outline-danger nav-link-outline">Invoices</a>
+                                <a href="{% url 'contract_list' %}" class="btn btn-outline-dark nav-link-outline">Contracts</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,47 +559,68 @@
     </div>
 
     <!-- Recent Activities -->
-    <!-- Recent Activities -->
-    <!-- Recent Activities -->
-    <div class="row mt-3">
+    <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Activities</h5>
+            <div class="card border-0 shadow-sm dashboard-card">
+                <div class="card-header bg-transparent border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0" style="font-weight: 600; color: #2c3e50;">
+                        <i class="fas fa-clock me-2" style="color: #3498db;"></i> Recent Activities
+                    </h5>
+                    <span class="badge bg-light text-dark">
+                        <i class="fas fa-rotate-right me-1"></i> Live
+                    </span>
                 </div>
-                <div class="card-body">
+                <div class="card-body pt-2">
                     {% if recent_activities %}
-                    <div class="list-group">
+                    <div class="list-group list-group-flush">
                         {% for activity in recent_activities %}
-                        <a href="{{ activity.url }}" class="list-group-item list-group-item-action">
+                        <a href="{{ activity.url }}" class="list-group-item list-group-item-action border-0 activity-item">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    {% if activity.type == 'proposal' %}
-                                    <span class="badge bg-primary me-2">Proposal</span>
-                                    {% elif activity.type == 'coverletter' %}
-                                    <span class="badge bg-success me-2">Cover Letter</span>
-                                    {% elif activity.type == 'gig' %}
-                                    <span class="badge bg-info me-2">Gig</span>
-                                    {% elif activity.type == 'pricing' %}
-                                    <span class="badge bg-warning text-dark me-2">Pricing</span>
-                                    {% elif activity.type == 'reply' %}
-                                    <span class="badge bg-secondary me-2">Reply</span>
-                                    {% elif activity.type == 'invoice' %}
-                                    <span class="badge bg-danger me-2">Invoice</span>
-                                    {% elif activity.type == 'contract' %}
-                                    <span class="badge bg-dark me-2">Contract</span>
-                                    {% endif %}
-                                    {{ activity.title }}
+                                <div class="d-flex align-items-center">
+                                    <div class="activity-icon {{ activity.type }}">
+                                        <i class="fas 
+                                           {% if activity.type == 'proposal' %}fa-file-alt
+                                           {% elif activity.type == 'coverletter' %}fa-envelope
+                                           {% elif activity.type == 'gig' %}fa-briefcase
+                                           {% elif activity.type == 'pricing' %}fa-calculator
+                                           {% elif activity.type == 'reply' %}fa-comment-dots
+                                           {% elif activity.type == 'invoice' %}fa-file-invoice
+                                           {% elif activity.type == 'contract' %}fa-file-contract
+                                           {% endif %}"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="activity-title">{{ activity.title }}</div>
+                                        <div class="activity-meta">
+                                            <span class="badge 
+                                               {% if activity.type == 'proposal' %}bg-primary
+                                               {% elif activity.type == 'coverletter' %}bg-success
+                                               {% elif activity.type == 'gig' %}bg-info
+                                               {% elif activity.type == 'pricing' %}bg-warning text-dark
+                                               {% elif activity.type == 'reply' %}bg-secondary
+                                               {% elif activity.type == 'invoice' %}bg-danger
+                                               {% elif activity.type == 'contract' %}bg-dark
+                                               {% endif %} activity-badge">
+                                                {{ activity.type|title }}
+                                            </span>
+                                            <i class="far fa-clock me-1"></i> {{ activity.created_at|timesince }} ago
+                                        </div>
+                                    </div>
                                 </div>
-                                <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
+                                <i class="fas fa-chevron-right" style="color: #dee2e6; font-size: 0.8rem;"></i>
                             </div>
                         </a>
                         {% endfor %}
                     </div>
                     {% else %}
-                    <div class="text-center text-muted py-3">
-                        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                        No recent activities yet. Start generating content!
+                    <div class="text-center py-5">
+                        <div class="mb-3 empty-state-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h6 class="text-muted">No recent activities yet</h6>
+                        <p class="text-muted small">Start generating content to see your activity here!</p>
+                        <a href="{% url 'proposal_create' %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i> Create Something
+                        </a>
                     </div>
                     {% endif %}
                 </div>

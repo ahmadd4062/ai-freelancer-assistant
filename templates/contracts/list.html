@@ -2,11 +2,95 @@
 {% block title %}My Contracts - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .page-header {
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 0.75rem;
+    }
+    .page-header h1 {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    .table-hover tbody tr {
+        transition: background-color 0.15s ease;
+        cursor: default;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    .table th {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    .table td {
+        vertical-align: middle;
+        padding: 0.75rem;
+    }
+    .table .contract-number {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    .table .btn-group .btn {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+        transition: transform 0.15s ease;
+    }
+    .table .btn-group .btn:hover {
+        transform: scale(1.1);
+    }
+    .empty-state {
+        padding: 4rem 0;
+    }
+    .empty-state i {
+        font-size: 3.5rem;
+        color: #dee2e6;
+    }
+    .empty-state h4 {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 1rem;
+    }
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+        .page-header .btn {
+            margin-top: 0.75rem;
+            width: 100%;
+        }
+        .table td, .table th {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+        .table .btn-group .btn {
+            padding: 0.15rem 0.4rem;
+            font-size: 0.7rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .table td, .table th {
+            font-size: 0.75rem;
+            padding: 0.4rem;
+        }
+        .table .btn-group .btn {
+            padding: 0.1rem 0.3rem;
+            font-size: 0.65rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>My Contracts</h1>
+            <div class="d-flex justify-content-between align-items-center mb-3 page-header">
+                <h1>
+                    <i class="fas fa-file-contract" style="color: #4a90e2;"></i> My Contracts
+                </h1>
                 <a href="{% url 'contract_create' %}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> New Contract
                 </a>
@@ -26,36 +110,36 @@
                                 <th>Project</th>
                                 <th>Amount</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for contract in contracts %}
                             <tr>
-                                <td><strong>{{ contract.contract_number }}</strong></td>
+                                <td><span class="contract-number">{{ contract.contract_number }}</span></td>
                                 <td>{{ contract.client_name }}</td>
                                 <td>{{ contract.project_title|truncatechars:20 }}</td>
-                                <td>${{ contract.total_amount|floatformat:2 }}</td>
+                                <td class="fw-bold text-success">${{ contract.total_amount|floatformat:2 }}</td>
                                 <td>
                                     <span class="badge {% if contract.status == 'signed' %}bg-success{% elif contract.status == 'sent' %}bg-info{% elif contract.status == 'completed' %}bg-primary{% else %}bg-warning{% endif %}">
                                         {{ contract.get_status_display }}
                                     </span>
                                 </td>
-                                <td>
+                                <td style="text-align: center;">
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-info">
+                                        <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-info" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{% url 'contract_generate' contract.pk %}" class="btn btn-success">
+                                        <a href="{% url 'contract_generate' contract.pk %}" class="btn btn-success" title="Generate AI">
                                             <i class="fas fa-robot"></i>
                                         </a>
-                                        <a href="{% url 'contract_pdf' contract.pk %}" class="btn btn-danger">
+                                        <a href="{% url 'contract_pdf' contract.pk %}" class="btn btn-danger" title="Download PDF">
                                             <i class="fas fa-file-pdf"></i>
                                         </a>
-                                        <a href="{% url 'contract_edit' contract.pk %}" class="btn btn-warning">
+                                        <a href="{% url 'contract_edit' contract.pk %}" class="btn btn-warning" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{% url 'contract_delete' contract.pk %}" class="btn btn-danger">
+                                        <a href="{% url 'contract_delete' contract.pk %}" class="btn btn-outline-danger" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -66,10 +150,10 @@
                     </table>
                 </div>
             {% else %}
-                <div class="text-center py-5">
-                    <i class="fas fa-file-contract fa-3x text-muted mb-3"></i>
+                <div class="text-center empty-state">
+                    <i class="fas fa-file-contract"></i>
                     <h4>No contracts yet</h4>
-                    <p class="text-muted">Create your first contract</p>
+                    <p class="text-muted">Create your first contract to get started</p>
                     <a href="{% url 'contract_create' %}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Create Contract
                     </a>

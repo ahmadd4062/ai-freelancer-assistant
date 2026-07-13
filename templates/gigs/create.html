@@ -2,57 +2,123 @@
 {% block title %}Create Gig Description - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .form-section {
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    .form-section h5 {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    .form-section h5 i {
+        color: #4a90e2;
+        margin-right: 0.5rem;
+    }
+    .tip-card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .tip-card .card-header {
+        background: linear-gradient(135deg, #4a90e2, #667eea);
+        border: none;
+        border-radius: 8px 8px 0 0;
+    }
+    .tip-item {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .tip-item:last-child {
+        border-bottom: none;
+    }
+    .tip-item i {
+        color: #28a745;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.15);
+    }
+    @media (max-width: 768px) {
+        .form-section {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Create New Gig Description</h1>
+            <h1 class="mb-4" style="font-weight: 700; color: #2c3e50;">
+                <i class="fas fa-briefcase" style="color: #17a2b8;"></i> Create New Gig Description
+            </h1>
+            <hr style="border-color: #e9ecef; opacity: 0.5;">
         </div>
     </div>
     
     <div class="row">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <form method="POST" action="{% url 'gig_create' %}">
                         {% csrf_token %}
                         
-                        <div class="mb-3">
-                            <label for="service_category" class="form-label">Service Category *</label>
-                            <input type="text" name="service_category" class="form-control" id="service_category" placeholder="e.g. Web Development, Graphic Design" required>
+                        <div class="form-section">
+                            <h5><i class="fas fa-tag"></i> Service Details</h5>
+                            <div class="mb-3">
+                                <label for="service_category" class="form-label fw-semibold">Service Category <span class="text-danger">*</span></label>
+                                <input type="text" name="service_category" class="form-control" id="service_category" placeholder="e.g. Web Development, Graphic Design" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="skills" class="form-label fw-semibold">Skills <span class="text-danger">*</span></label>
+                                <input type="text" name="skills" class="form-control" id="skills" placeholder="e.g. Python, Django, React" required>
+                                <small class="text-muted">Separate skills with commas</small>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="skills" class="form-label">Skills (comma separated) *</label>
-                            <input type="text" name="skills" class="form-control" id="skills" placeholder="e.g. Python, Django, React" required>
+                        <div class="form-section">
+                            <h5><i class="fas fa-sliders-h"></i> Experience & Delivery</h5>
+                            <div class="mb-3">
+                                <label for="experience_level" class="form-label fw-semibold">Experience Level</label>
+                                <select name="experience_level" class="form-select" id="experience_level">
+                                    <option value="entry">🌱 Entry Level</option>
+                                    <option value="intermediate" selected>📈 Intermediate</option>
+                                    <option value="expert">🏆 Expert</option>
+                                </select>
+                            </div>
+                            <div class="mb-0">
+                                <label for="delivery_time" class="form-label fw-semibold">Delivery Time <span class="text-danger">*</span></label>
+                                <input type="text" name="delivery_time" class="form-control" id="delivery_time" placeholder="e.g. 3 days, 1 week" required>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="experience_level" class="form-label">Experience Level</label>
-                            <select name="experience_level" class="form-select" id="experience_level">
-                                <option value="entry">Entry Level</option>
-                                <option value="intermediate" selected>Intermediate</option>
-                                <option value="expert">Expert</option>
-                            </select>
+                        <div class="form-section">
+                            <h5><i class="fas fa-list-check"></i> Service Features</h5>
+                            <div class="mb-3">
+                                <label for="features" class="form-label fw-semibold">Features <span class="text-danger">*</span></label>
+                                <input type="text" name="features" class="form-control" id="features" placeholder="e.g. Responsive Design, SEO Optimization" required>
+                                <small class="text-muted">Separate features with commas</small>
+                            </div>
+                            <div class="mb-0">
+                                <label for="revisions" class="form-label fw-semibold">Number of Revisions</label>
+                                <input type="number" name="revisions" class="form-control" id="revisions" value="1" min="0">
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="delivery_time" class="form-label">Delivery Time *</label>
-                            <input type="text" name="delivery_time" class="form-control" id="delivery_time" placeholder="e.g. 3 days, 1 week" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="features" class="form-label">Features (comma separated) *</label>
-                            <input type="text" name="features" class="form-control" id="features" placeholder="e.g. Responsive Design, SEO Optimization" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="revisions" class="form-label">Number of Revisions</label>
-                            <input type="number" name="revisions" class="form-control" id="revisions" value="1" min="0">
-                        </div>
-                        
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{% url 'gig_list' %}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save and Generate</button>
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-4">
+                            <a href="{% url 'gig_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-info text-white">
+                                <i class="fas fa-magic"></i> Save & Generate
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -60,17 +126,23 @@
         </div>
         
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+            <div class="card tip-card">
+                <div class="card-header text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Quick Tips</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Be specific about your service</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> List all relevant skills</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Include key features of your service</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Set realistic delivery time</li>
-                    </ul>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Be specific about your service
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> List all relevant skills
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Include key features of your service
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Set realistic delivery time
+                    </div>
                 </div>
             </div>
         </div>

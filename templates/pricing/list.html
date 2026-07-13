@@ -2,11 +2,100 @@
 {% block title %}Pricing History - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .page-header {
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 0.75rem;
+    }
+    .page-header h1 {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    .table-hover tbody tr {
+        transition: background-color 0.15s ease;
+        cursor: default;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    .table th {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    .table td {
+        vertical-align: middle;
+        padding: 0.75rem;
+    }
+    .table .total-price {
+        font-weight: 600;
+        color: #28a745;
+        font-size: 1.05rem;
+    }
+    .table .btn-group .btn {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+        transition: transform 0.15s ease;
+    }
+    .table .btn-group .btn:hover {
+        transform: scale(1.1);
+    }
+    .empty-state {
+        padding: 4rem 0;
+    }
+    .empty-state i {
+        font-size: 3.5rem;
+        color: #dee2e6;
+    }
+    .empty-state h4 {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 1rem;
+    }
+    .badge-complexity {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+    }
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+        .page-header .btn {
+            margin-top: 0.75rem;
+            width: 100%;
+        }
+        .table td, .table th {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+        .table .btn-group .btn {
+            padding: 0.15rem 0.4rem;
+            font-size: 0.7rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .table td, .table th {
+            font-size: 0.75rem;
+            padding: 0.4rem;
+        }
+        .table .btn-group .btn {
+            padding: 0.1rem 0.3rem;
+            font-size: 0.65rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Pricing History</h1>
+            <div class="d-flex justify-content-between align-items-center mb-3 page-header">
+                <h1>
+                    <i class="fas fa-chart-line" style="color: #f39c12;"></i> Pricing History
+                </h1>
                 <a href="{% url 'pricing_calculator' %}" class="btn btn-primary">
                     <i class="fas fa-calculator"></i> New Calculation
                 </a>
@@ -27,7 +116,7 @@
                                 <th>Urgency</th>
                                 <th>Total Price</th>
                                 <th>Created</th>
-                                <th>Actions</th>
+                                <th style="text-align: center;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,16 +124,24 @@
                             <tr>
                                 <td>${{ pricing.hourly_rate }}</td>
                                 <td>{{ pricing.estimated_hours }}</td>
-                                <td>{{ pricing.get_complexity_display }}</td>
-                                <td>{{ pricing.get_urgency_display }}</td>
-                                <td><strong>${{ pricing.suggested_price|floatformat:2 }}</strong></td>
-                                <td>{{ pricing.created_at|date:"M d, Y" }}</td>
                                 <td>
+                                    <span class="badge {% if pricing.complexity == 'low' %}bg-secondary{% elif pricing.complexity == 'medium' %}bg-info{% else %}bg-dark{% endif %} badge-complexity">
+                                        {{ pricing.get_complexity_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if pricing.urgency == 'low' %}bg-secondary{% elif pricing.urgency == 'medium' %}bg-warning{% else %}bg-danger{% endif %} badge-complexity">
+                                        {{ pricing.get_urgency_display }}
+                                    </span>
+                                </td>
+                                <td class="total-price">${{ pricing.suggested_price|floatformat:2 }}</td>
+                                <td>{{ pricing.created_at|date:"M d, Y" }}</td>
+                                <td style="text-align: center;">
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{% url 'pricing_detail' pricing.pk %}" class="btn btn-info">
+                                        <a href="{% url 'pricing_detail' pricing.pk %}" class="btn btn-info" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{% url 'pricing_delete' pricing.pk %}" class="btn btn-danger">
+                                        <a href="{% url 'pricing_delete' pricing.pk %}" class="btn btn-outline-danger" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -55,8 +152,8 @@
                     </table>
                 </div>
             {% else %}
-                <div class="text-center py-5">
-                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <div class="text-center empty-state">
+                    <i class="fas fa-chart-line"></i>
                     <h4>No pricing calculations yet</h4>
                     <p class="text-muted">Calculate your first project pricing</p>
                     <a href="{% url 'pricing_calculator' %}" class="btn btn-primary">

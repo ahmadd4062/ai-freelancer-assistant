@@ -2,59 +2,151 @@
 {% block title %}Generate Contract - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .info-card, .generate-card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        transition: box-shadow 0.2s ease;
+    }
+    .info-card:hover, .generate-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    }
+    .info-card .card-header {
+        background: #2c3e50;
+        border: none;
+        padding: 0.75rem 1.25rem;
+    }
+    .info-card .card-header h5 {
+        color: white;
+        font-weight: 600;
+    }
+    .info-item {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    .info-item strong {
+        color: #2c3e50;
+        display: inline-block;
+        min-width: 90px;
+    }
+    .generate-card .card-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+    }
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+    .feature-list li {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .feature-list li:last-child {
+        border-bottom: none;
+    }
+    .feature-list li i {
+        color: #28a745;
+        margin-right: 0.75rem;
+    }
+    .credit-badge {
+        background: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 0.9rem;
+    }
+    .btn-generate {
+        padding: 0.75rem;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+    }
+    .btn-generate:hover {
+        transform: translateY(-2px);
+    }
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+        .page-header .btn {
+            margin-top: 0.75rem;
+            width: 100%;
+        }
+        .info-item strong {
+            min-width: 70px;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>Generate Contract with AI</h1>
-                <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-secondary">
+            <div class="d-flex justify-content-between align-items-center mb-4 page-header">
+                <h1 style="font-weight: 700; color: #2c3e50;">
+                    <i class="fas fa-robot" style="color: #28a745;"></i> Generate Contract with AI
+                </h1>
+                <a href="{% url 'contract_detail' contract.pk %}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
+            <hr style="border-color: #e9ecef; opacity: 0.5;">
         </div>
     </div>
     
-    <div class="row">
+    <div class="row g-3">
+        <!-- Contract Info -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Contract Information</h5>
+            <div class="card info-card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Contract Information</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Contract #:</strong> {{ contract.contract_number }}</p>
-                    <p><strong>Client:</strong> {{ contract.client_name }}</p>
-                    <p><strong>Project:</strong> {{ contract.project_title }}</p>
-                    <p><strong>Amount:</strong> ${{ contract.total_amount|floatformat:2 }}</p>
-                    <p><strong>Timeline:</strong> {{ contract.timeline }}</p>
-                    <hr>
-                    <p><strong>Project Scope:</strong></p>
-                    <p>{{ contract.project_scope|truncatechars:200 }}</p>
-                    <p><strong>Payment Terms:</strong></p>
-                    <p>{{ contract.payment_terms|truncatechars:100 }}</p>
+                    <div class="info-item"><strong>Contract #:</strong> {{ contract.contract_number }}</div>
+                    <div class="info-item"><strong>Client:</strong> {{ contract.client_name }}</div>
+                    <div class="info-item"><strong>Project:</strong> {{ contract.project_title }}</div>
+                    <div class="info-item"><strong>Amount:</strong> <span class="fw-bold text-success">${{ contract.total_amount|floatformat:2 }}</span></div>
+                    <div class="info-item"><strong>Timeline:</strong> {{ contract.timeline }}</div>
+                    
+                    <div class="mt-3">
+                        <strong style="color: #2c3e50;">Project Scope:</strong>
+                        <p class="mt-1 text-muted" style="font-size: 0.95rem;">{{ contract.project_scope|truncatechars:200 }}</p>
+                    </div>
+                    <div class="mt-2">
+                        <strong style="color: #2c3e50;">Payment Terms:</strong>
+                        <p class="mt-1 text-muted" style="font-size: 0.95rem;">{{ contract.payment_terms|truncatechars:100 }}</p>
+                    </div>
                 </div>
             </div>
         </div>
         
+        <!-- AI Generation -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">AI Generation</h5>
+            <div class="card generate-card">
+                <div class="card-header">
+                    <h5 class="mb-0 text-white"><i class="fas fa-magic me-2"></i>AI Generation</h5>
                 </div>
                 <div class="card-body">
-                    <p>Click the button below to generate a professional contract using AI.</p>
-                    <ul>
-                        <li>Professional legal language</li>
-                        <li>All project details included</li>
-                        <li>Terms and conditions</li>
-                        <li>Signature section</li>
+                    <p class="mb-3">Generate a professional contract using AI with:</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Professional legal language</li>
+                        <li><i class="fas fa-check-circle"></i> All project details included</li>
+                        <li><i class="fas fa-check-circle"></i> Terms and conditions</li>
+                        <li><i class="fas fa-check-circle"></i> Signature section</li>
                     </ul>
-                    <p><small class="text-muted">This will use 1 AI credit.</small></p>
                     
-                    <form method="POST" action="{% url 'contract_generate' contract.pk %}">
+                    <div class="credit-badge mt-3">
+                        <i class="fas fa-coins text-warning"></i> 
+                        This will use <strong>1 AI credit</strong>
+                    </div>
+                    
+                    <form method="POST" action="{% url 'contract_generate' contract.pk %}" class="mt-3">
                         {% csrf_token %}
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-robot"></i> Generate Contract
+                            <button type="submit" class="btn btn-success btn-generate">
+                                <i class="fas fa-robot me-2"></i> Generate Contract
                             </button>
                         </div>
                     </form>

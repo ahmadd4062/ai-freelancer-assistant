@@ -2,58 +2,123 @@
 {% block title %}Edit Cover Letter - AI Freelancer Assistant{% endblock %}
 
 {% block content %}
+<style>
+    .form-section {
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    .form-section h5 {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    .form-section h5 i {
+        color: #4a90e2;
+        margin-right: 0.5rem;
+    }
+    .tip-card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .tip-card .card-header {
+        background: linear-gradient(135deg, #4a90e2, #667eea);
+        border: none;
+        border-radius: 8px 8px 0 0;
+    }
+    .tip-item {
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .tip-item:last-child {
+        border-bottom: none;
+    }
+    .tip-item i {
+        color: #28a745;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.15);
+    }
+    @media (max-width: 768px) {
+        .form-section {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Edit Cover Letter</h1>
+            <h1 class="mb-4" style="font-weight: 700; color: #2c3e50;">
+                <i class="fas fa-edit" style="color: #f39c12;"></i> Edit Cover Letter
+            </h1>
+            <hr style="border-color: #e9ecef; opacity: 0.5;">
         </div>
     </div>
     
     <div class="row">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <form method="POST" action="{% url 'coverletter_edit' coverletter.pk %}">
                         {% csrf_token %}
                         
-                        <div class="mb-3">
-                            <label for="job_title" class="form-label">Job Title *</label>
-                            <input type="text" name="job_title" class="form-control" id="job_title" value="{{ coverletter.job_title }}" required>
+                        <div class="form-section">
+                            <h5><i class="fas fa-briefcase"></i> Job Details</h5>
+                            <div class="mb-3">
+                                <label for="job_title" class="form-label fw-semibold">Job Title <span class="text-danger">*</span></label>
+                                <input type="text" name="job_title" class="form-control" id="job_title" value="{{ coverletter.job_title }}" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="company_name" class="form-label fw-semibold">Company Name <span class="text-danger">*</span></label>
+                                <input type="text" name="company_name" class="form-control" id="company_name" value="{{ coverletter.company_name }}" required>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="company_name" class="form-label">Company Name *</label>
-                            <input type="text" name="company_name" class="form-control" id="company_name" value="{{ coverletter.company_name }}" required>
+                        <div class="form-section">
+                            <h5><i class="fas fa-user-tie"></i> Your Profile</h5>
+                            <div class="mb-3">
+                                <label for="experience" class="form-label fw-semibold">Your Experience <span class="text-danger">*</span></label>
+                                <textarea name="experience" class="form-control" id="experience" rows="3" required>{{ coverletter.experience }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="skills" class="form-label fw-semibold">Skills <span class="text-danger">*</span></label>
+                                <input type="text" name="skills" class="form-control" id="skills" value="{{ coverletter.skills }}" required>
+                                <small class="text-muted">Separate skills with commas</small>
+                            </div>
+                            <div class="mb-0">
+                                <label for="portfolio_url" class="form-label fw-semibold">Portfolio URL</label>
+                                <input type="url" name="portfolio_url" class="form-control" id="portfolio_url" value="{{ coverletter.portfolio_url|default:'' }}">
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="experience" class="form-label">Your Experience *</label>
-                            <textarea name="experience" class="form-control" id="experience" rows="3" required>{{ coverletter.experience }}</textarea>
+                        <div class="form-section">
+                            <h5><i class="fas fa-sliders-h"></i> Style Settings</h5>
+                            <div class="mb-0">
+                                <label for="tone" class="form-label fw-semibold">Tone</label>
+                                <select name="tone" class="form-select" id="tone">
+                                    <option value="professional" {% if coverletter.tone == 'professional' %}selected{% endif %}>📊 Professional</option>
+                                    <option value="enthusiastic" {% if coverletter.tone == 'enthusiastic' %}selected{% endif %}>🎯 Enthusiastic</option>
+                                    <option value="confident" {% if coverletter.tone == 'confident' %}selected{% endif %}>💪 Confident</option>
+                                    <option value="humble" {% if coverletter.tone == 'humble' %}selected{% endif %}>🙏 Humble</option>
+                                </select>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="skills" class="form-label">Skills (comma separated) *</label>
-                            <input type="text" name="skills" class="form-control" id="skills" value="{{ coverletter.skills }}" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="portfolio_url" class="form-label">Portfolio URL</label>
-                            <input type="url" name="portfolio_url" class="form-control" id="portfolio_url" value="{{ coverletter.portfolio_url|default:'' }}">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="tone" class="form-label">Tone</label>
-                            <select name="tone" class="form-select" id="tone">
-                                <option value="professional" {% if coverletter.tone == 'professional' %}selected{% endif %}>Professional</option>
-                                <option value="enthusiastic" {% if coverletter.tone == 'enthusiastic' %}selected{% endif %}>Enthusiastic</option>
-                                <option value="confident" {% if coverletter.tone == 'confident' %}selected{% endif %}>Confident</option>
-                                <option value="humble" {% if coverletter.tone == 'humble' %}selected{% endif %}>Humble</option>
-                            </select>
-                        </div>
-                        
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{% url 'coverletter_detail' coverletter.pk %}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Cover Letter</button>
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-4">
+                            <a href="{% url 'coverletter_detail' coverletter.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Cover Letter
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -61,17 +126,23 @@
         </div>
         
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips</h5>
+            <div class="card tip-card">
+                <div class="card-header text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Quick Tips</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update job details</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Modify experience description</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Add or remove skills</li>
-                        <li class="mb-2"><i class="fas fa-check text-success"></i> Update portfolio URL</li>
-                    </ul>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Update job details
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Modify experience description
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Add or remove skills
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i> Update portfolio URL
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,50 +2,92 @@
 {% block title %}AI Freelancer Assistant - Home{% endblock %}
 
 {% block content %}
+<style>
+    .feature-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    }
+    .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .hero-title {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    .hero-title i {
+        color: #4a90e2;
+    }
+    .cta-btn {
+        padding: 0.6rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+    }
+    .cta-btn:hover {
+        transform: translateY(-2px);
+    }
+    @media (max-width: 576px) {
+        .cta-btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 text-center">
-            <h1 class="display-3 mb-4">
-                <i class="fas fa-robot text-primary"></i> AI Freelancer Assistant
+            <h1 class="display-3 mb-4 hero-title">
+                <i class="fas fa-robot"></i> AI Freelancer Assistant
             </h1>
-            <p class="lead mb-4">
+            <p class="lead mb-4" style="color: #6c757d;">
                 Automate your freelance workflow with AI-powered tools for proposals, 
                 cover letters, invoices, contracts, and more.
             </p>
-            <div class="row mt-5">
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
+            
+            <div class="row mt-5 g-3">
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
                         <div class="card-body">
-                            <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
-                            <h5>Proposals</h5>
-                            <p class="text-muted">Generate professional proposals in seconds</p>
+                            <i class="fas fa-file-alt feature-icon" style="color: #667eea;"></i>
+                            <h5 style="font-weight: 600;">Proposals</h5>
+                            <p class="text-muted" style="font-size: 0.95rem;">Generate professional proposals in seconds</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
                         <div class="card-body">
-                            <i class="fas fa-envelope fa-2x text-success mb-2"></i>
-                            <h5>Cover Letters</h5>
-                            <p class="text-muted">Create compelling cover letters with AI</p>
+                            <i class="fas fa-envelope feature-icon" style="color: #28a745;"></i>
+                            <h5 style="font-weight: 600;">Cover Letters</h5>
+                            <p class="text-muted" style="font-size: 0.95rem;">Create compelling cover letters with AI</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100">
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
                         <div class="card-body">
-                            <i class="fas fa-file-invoice fa-2x text-info mb-2"></i>
-                            <h5>Invoices</h5>
-                            <p class="text-muted">Generate professional invoices instantly</p>
+                            <i class="fas fa-file-invoice feature-icon" style="color: #17a2b8;"></i>
+                            <h5 style="font-weight: 600;">Invoices</h5>
+                            <p class="text-muted" style="font-size: 0.95rem;">Generate professional invoices instantly</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="mt-4">
-                <a href="{% url 'register' %}" class="btn btn-success btn-lg me-2">
+            
+            <div class="mt-4 d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'register' %}" class="btn btn-success btn-lg cta-btn">
                     <i class="fas fa-user-plus"></i> Get Started
                 </a>
-                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg cta-btn">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </a>
             </div>
