@@ -162,9 +162,18 @@ if not DEBUG:
     # SECURE_HSTS_PRELOAD = True
     pass
 
-# Session Settings
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# If you want to keep DEBUG=False, set this to allow all origins in development
+# (only do this temporarily for testing)
+CSRF_COOKIE_DOMAIN = '.railway.app'
+
+# CSRF and Session settings for HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    'https://ai-freelancer-assistant-production-0b28.up.railway.app',
+    'https://*.railway.app',
+]
+
