@@ -1,3 +1,7 @@
+"""
+Django settings for ai_freelancer_assistant project.
+"""
+
 import os
 import dj_database_url
 from dotenv import load_dotenv
@@ -5,13 +9,21 @@ from pathlib import Path
 
 load_dotenv()
 
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-key-change-this')
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-_nz=&bbxo9fujpm_^imn@rvh(r@rc@th^&b9!&uzo7qfpet9*w')
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*.up.railway.app']
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# CSRF Trusted Origins for Railway
+CSRF_TRUSTED_ORIGINS = [
+    'https://ai-freelancer-assistant-production-0b28.up.railway.app',
+    'https://*.railway.app',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,8 +37,8 @@ INSTALLED_APPS = [
     'proposals',
     'gigs',
     'pricing',
-    'replies',
-    'invoices',
+    'replies',      
+    'invoices',     
     'contracts',
     'history',
 ]
@@ -61,6 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ai_freelancer_assistant.wsgi.application'
 
+# Database
 if os.getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
@@ -78,10 +91,21 @@ else:
     }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -109,5 +133,12 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# Security - keep it simple for Railway
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
