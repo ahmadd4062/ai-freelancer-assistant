@@ -147,12 +147,12 @@ X_FRAME_OPTIONS = 'DENY'
 
 # HTTPS Settings - only enabled when DEBUG=False
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # SECURE_SSL_REDIRECT = True  # Comment this out for Railway
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    # SECURE_HSTS_SECONDS = 31536000  # Comment these out too
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # SECURE_HSTS_PRELOAD = True
     CSRF_COOKIE_DOMAIN = '.railway.app'
     CSRF_TRUSTED_ORIGINS = [
         'https://ai-freelancer-assistant-production-0b28.up.railway.app',
