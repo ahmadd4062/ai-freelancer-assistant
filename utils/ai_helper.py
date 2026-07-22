@@ -10,7 +10,7 @@ import re
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 # Use the working model from your test
-WORKING_MODEL = "gemini-3.5-flash"
+WORKING_MODEL = "gemini-3.1-flash-lite"
 
 def generate_proposal(proposal_data):
     """
