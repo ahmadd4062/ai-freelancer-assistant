@@ -1,30 +1,18 @@
-"""
-Django settings for ai_freelancer_assistant project.
-"""
-
 import os
 import dj_database_url
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load environment variables
 load_dotenv()
 
-# Google Gemini API Key
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-_nz=&bbxo9fujpm_^imn@rvh(r@rc@th^&b9!&uzo7qfpet9*w')
-
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-key-change-this')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://*.up.railway.app']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,8 +25,8 @@ INSTALLED_APPS = [
     'proposals',
     'gigs',
     'pricing',
-    'replies',      
-    'invoices',     
+    'replies',
+    'invoices',
     'contracts',
     'history',
 ]
@@ -73,7 +61,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ai_freelancer_assistant.wsgi.application'
 
-# Database
 if os.getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
@@ -90,47 +77,30 @@ else:
         }
     }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 8,
-        }
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Authentication
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
-# Message tags
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
@@ -140,28 +110,4 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Security Settings
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-
-# HTTPS Settings - only enabled when DEBUG=False
-if not DEBUG:
-    # SECURE_SSL_REDIRECT = True  # Comment this out for Railway
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    # SECURE_HSTS_SECONDS = 31536000  # Comment these out too
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    # SECURE_HSTS_PRELOAD = True
-    CSRF_COOKIE_DOMAIN = '.railway.app'
-    CSRF_TRUSTED_ORIGINS = [
-        'https://ai-freelancer-assistant-production-0b28.up.railway.app',
-        'https://*.railway.app',
-    ]
-
-# Session settings - always enabled
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
